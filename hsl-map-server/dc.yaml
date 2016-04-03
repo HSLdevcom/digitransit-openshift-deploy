@@ -1,0 +1,61 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: hsl-map-server
+    name: hsl-map-server
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: hsldevcom/hsl-map-server
+      generation: null
+      importPolicy: {}
+      name: latest
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: hsl-map-server
+    name: hsl-map-server
+  spec:
+    replicas: 1
+    selector:
+      app: hsl-map-server
+      deploymentconfig: hsl-map-server
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: hsl-map-server
+          deploymentconfig: hsl-map-server
+      spec:
+        containers:
+        - image: hsldevcom/hsl-map-server
+          name: hsl-map-server
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - hsl-map-server
+        from:
+          kind: ImageStreamTag
+          name: hsl-map-server:latest
+      type: ImageChange
+  status: {}
+kind: List
+metadata: {}

@@ -1,0 +1,25 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: pelias-data-container
+    name: pelias-data-container
+  spec:
+    ports:
+    - name: 9200-tcp
+      port: 9200
+      protocol: TCP
+      targetPort: 9200
+    - name: 9300-tcp
+      port: 9300
+      protocol: TCP
+      targetPort: 9300
+    selector:
+      app: pelias-data-container
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

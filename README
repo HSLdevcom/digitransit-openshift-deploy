@@ -1,0 +1,11 @@
+Install the script and requirements globally::
+
+    pip install -e .
+
+Install to $HOME::
+
+    pip install --user -e .
+
+Run (from project root containing data folders)::
+
+    dt_os_menu

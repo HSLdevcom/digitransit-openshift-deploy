@@ -1,0 +1,21 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: raildigitraffic2gtfsrt
+    name: raildigitraffic2gtfsrt
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: raildigitraffic2gtfsrt
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

@@ -1,0 +1,20 @@
+apiVersion: v1
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: hsl-map-server
+    name: hsl-map-server
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: hsl-map-server
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

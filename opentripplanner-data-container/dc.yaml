@@ -1,0 +1,67 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: opentripplanner-data-container
+    name: opentripplanner-data-container
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: hsldevcom/opentripplanner-data-container
+      generation: null
+      importPolicy: {}
+      name: latest
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: opentripplanner-data-container
+    name: opentripplanner-data-container
+  spec:
+    replicas: 1
+    selector:
+      app: opentripplanner-data-container
+      deploymentconfig: opentripplanner-data-container
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: opentripplanner-data-container
+          deploymentconfig: opentripplanner-data-container
+      spec:
+        containers:
+        - image: hsldevcom/opentripplanner-data-container
+          name: opentripplanner-data-container
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          volumeMounts:
+          - mountPath: /root/.m2
+            name: opentripplanner-data-container-volume-1
+        volumes:
+        - emptyDir: {}
+          name: opentripplanner-data-container-volume-1
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - opentripplanner-data-container
+        from:
+          kind: ImageStreamTag
+          name: opentripplanner-data-container:latest
+      type: ImageChange
+  status: {}
+kind: List
+metadata: {}

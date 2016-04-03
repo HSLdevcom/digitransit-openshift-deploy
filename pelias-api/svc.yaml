@@ -1,0 +1,21 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: pelias-api
+    name: pelias-api
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: pelias-api
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

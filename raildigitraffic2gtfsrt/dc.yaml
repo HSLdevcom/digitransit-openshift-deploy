@@ -1,0 +1,61 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: raildigitraffic2gtfsrt
+    name: raildigitraffic2gtfsrt
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: hsldevcom/raildigitraffic2gtfsrt
+      generation: null
+      importPolicy: {}
+      name: latest
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: raildigitraffic2gtfsrt
+    name: raildigitraffic2gtfsrt
+  spec:
+    replicas: 1
+    selector:
+      app: raildigitraffic2gtfsrt
+      deploymentconfig: raildigitraffic2gtfsrt
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: raildigitraffic2gtfsrt
+          deploymentconfig: raildigitraffic2gtfsrt
+      spec:
+        containers:
+        - image: hsldevcom/raildigitraffic2gtfsrt
+          name: raildigitraffic2gtfsrt
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - raildigitraffic2gtfsrt
+        from:
+          kind: ImageStreamTag
+          name: raildigitraffic2gtfsrt:latest
+      type: ImageChange
+  status: {}
+kind: List
+metadata: {}

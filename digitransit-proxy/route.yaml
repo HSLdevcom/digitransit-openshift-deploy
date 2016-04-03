@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Route
+metadata:
+  creationTimestamp: null
+  labels:
+    app: digitransit-proxy
+  name: digitransit-proxy
+spec:
+  host: foo.digitransit.fi
+  port:
+    targetPort: 80-tcp
+  to:
+    kind: Service
+    name: digitransit-proxy
