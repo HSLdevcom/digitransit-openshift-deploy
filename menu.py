@@ -88,7 +88,11 @@ class DeployShell(cmd2.Cmd, object):
         for t in targets:
             # TODO delete should take the target from the name field in yaml
             #      as that might not match the dir name
-            if not self.oc_cmd('delete', type, t):
+            # OpenShift (or oc) limits service names to 24 chars, but
+            # other resources can be longer
+            if type == 'svc' and not self.oc_cmd('delete', type, t[:24]):
+                return
+            elif not self.oc_cmd('delete', type, t):
                 return
             if type == 'dc':
                 # This also deletes istags
@@ -153,6 +157,27 @@ class DeployShell(cmd2.Cmd, object):
         name, key, value = arg.split()
         self.oc_cmd('create', 'secret', 'generic', name,
                     '--from-literal=' + key + '=' + value)
+
+    def do_mem(self, arg):
+        p = Popen([self.config['oc_path'], 'get', 'pods'], stdout=PIPE)
+        p.wait()
+        p.stdout.readline()
+        print('{:<45} {:>16} {:>16}'.format('POD', 'Used memory', 'Free memory'))
+        for pod in (x.split()[0] for x in p.stdout.readlines()):
+            # Without -T the oc rsh will bork the shell (actually tty) echoing
+            ps = Popen([self.config['oc_path'], 'rsh', '-T', pod,
+                        'ps', 'vwx', '--sort', 'rss'],
+                       stdout=PIPE)
+            free = Popen([self.config['oc_path'], 'rsh', '-T', pod, 'free', '-m'],
+                         stdout=PIPE)
+            ps.wait()
+            free.wait()
+            ps.stdout.readline()
+            free.stdout.readline()
+            print('{:<45} {:>15}M {:>15}M'.format(
+                pod,
+                sum((int(x.split()[7]) for x in ps.stdout.readlines())) / 1000,
+                free.stdout.readline().split()[3]))
 
     def do_eof(self, arg):
         print()  # Clear line, like when quitting with quit
