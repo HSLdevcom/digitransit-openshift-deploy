@@ -40,6 +40,9 @@ items:
       spec:
         containers:
         - image: hsldevcom/opentripplanner
+          env:
+          - name: OTP_DATA_CONTAINER_URL
+            value: http://opentripplanner-data-con:8080
           name: opentripplanner
           ports:
           - containerPort: 8080

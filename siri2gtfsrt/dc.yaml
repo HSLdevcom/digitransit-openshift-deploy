@@ -39,7 +39,14 @@ items:
           deploymentconfig: siri2gtfsrt
       spec:
         containers:
-        - image: hsldevcom/siri2gtfsrt
+        - env:
+          - name: CHAIN_URL
+            value: http://raildigitraffic2gtfsrt:8080/hsl
+          - name: HSL_URL
+            value: http://navigator-server:8080/siriaccess/vm/json
+          - name: TRIP_UPDATE_URL
+            value: http://hslalert:8080/
+          image: hsldevcom/siri2gtfsrt
           name: siri2gtfsrt
           ports:
           - containerPort: 8080
