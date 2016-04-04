@@ -9,3 +9,9 @@ Install to $HOME::
 Run (from project root containing data folders)::
 
     dt_os_menu
+
+hsl-map-server needs FONTSTACK_PASSWORD env variable, that's
+populated from fontstack secret, key fontstack_password.
+You can create it with::
+
+    oc create secret generic fontstack--from-literal=fontstack_password=foobar
