@@ -46,7 +46,9 @@ items:
             protocol: TCP
           - containerPort: 8081
             protocol: TCP
-          resources: {}
+          resources:
+            requests:
+              memory: 7500Mi
           volumeMounts:
           - mountPath: /root/.m2
             name: opentripplanner-volume-1

@@ -39,12 +39,20 @@ items:
           deploymentconfig: hsl-map-server
       spec:
         containers:
-        - image: hsldevcom/hsl-map-server
+        - env:
+          - name: FONTSTACK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: fontstack
+                name: fontstack_password
+          image: hsldevcom/hsl-map-server
           name: hsl-map-server
           ports:
           - containerPort: 8080
             protocol: TCP
-          resources: {}
+          resources:
+            requests:
+              memory: 1500Mi
     test: false
     triggers:
     - type: ConfigChange

@@ -31,18 +31,14 @@ items:
           app: digitransit-ui
       spec:
         containers:
-        - env:
-          - name: FONTSTACK_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: fontstack
-                name: fontstack_password
-          image: hsldevcom/digitransit-ui
+        - image: hsldevcom/digitransit-ui
           name: digitransit-ui
           ports:
           - containerPort: 8080
             protocol: TCP
-          resources: {}
+          resources:
+            requests:
+              memory: 100Mi
     test: false
     triggers:
     - type: ConfigChange

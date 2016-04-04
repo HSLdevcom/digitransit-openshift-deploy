@@ -46,7 +46,9 @@ items:
             protocol: TCP
           - containerPort: 9300
             protocol: TCP
-          resources: {}
+          resources:
+            requests:
+              memory: 1500Mi
           volumeMounts:
           - mountPath: /usr/share/elasticsearch/data
             name: pelias-data-container-volume-1
