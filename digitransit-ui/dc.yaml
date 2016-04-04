@@ -31,7 +31,18 @@ items:
           app: digitransit-ui
       spec:
         containers:
-        - image: hsldevcom/digitransit-ui
+        - env:
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrydsn
+          - name: SENTRY_SECRET_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrysecretdsn
+          image: hsldevcom/digitransit-ui
           name: digitransit-ui
           ports:
           - containerPort: 8080
