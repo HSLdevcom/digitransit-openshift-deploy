@@ -162,7 +162,7 @@ class DeployShell(cmd2.Cmd, object):
         p = Popen([self.config['oc_path'], 'get', 'pods'], stdout=PIPE)
         p.wait()
         p.stdout.readline()
-        print('{:<45} {:>16} {:>16}'.format('POD', 'Used memory', 'Free memory'))
+        print('{:<45} {:>12} {:>12} {:>12}'.format('POD', 'Used memory', 'Free memory', '+- swap/cache'))
         for pod in (x.split()[0] for x in p.stdout.readlines()):
             # Without -T the oc rsh will bork the shell (actually tty) echoing
             ps = Popen([self.config['oc_path'], 'rsh', '-T', pod,
@@ -174,9 +174,10 @@ class DeployShell(cmd2.Cmd, object):
             free.wait()
             ps.stdout.readline()
             free.stdout.readline()
-            print('{:<45} {:>15}M {:>15}M'.format(
+            print('{:<45} {:>11}M {:>11}M {:>11}M'.format(
                 pod,
                 sum((int(x.split()[7]) for x in ps.stdout.readlines())) / 1000,
+                free.stdout.readline().split()[3],
                 free.stdout.readline().split()[3]))
 
     def do_eof(self, arg):

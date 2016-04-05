@@ -39,7 +39,10 @@ items:
           deploymentconfig: raildigitraffic2gtfsrt
       spec:
         containers:
-        - image: hsldevcom/raildigitraffic2gtfsrt
+        - env:
+          - name: ROUTER_ZIP_URL
+            value: http://opentripplanner-data-con:8080/router-finland.zip
+          image: hsldevcom/raildigitraffic2gtfsrt
           name: raildigitraffic2gtfsrt
           ports:
           - containerPort: 8080
