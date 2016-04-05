@@ -6,9 +6,9 @@ metadata:
     app: digitransit-proxy
   name: digitransit-proxy
 spec:
-  host: foo.digitransit.fi
+  host: api.digitransit.fi
   port:
-    targetPort: 80-tcp
+    targetPort: 8080-tcp
   to:
     kind: Service
     name: digitransit-proxy

@@ -14,4 +14,8 @@ hsl-map-server needs FONTSTACK_PASSWORD env variable, that's
 populated from fontstack secret, key fontstack_password.
 You can create it with::
 
-    oc create secret generic fontstack--from-literal=fontstack_password=foobar
+    oc create secret generic fontstack--from-literal=fontstackpassword=foobar
+
+digitransit-ui needs SENTRY_DSN and SENTRY_SECRET_DSN. Create them with::
+
+    oc create secret generic sentry --from-literal=sentrydsn=https://SENTRY_USER@app.getsentry.com/SENTRY_ID --from-literal=sentrysecretdsn=https://SENTRY_USER:SENTRY_PW@app.getsentry.com/SENTRY_ID

@@ -43,8 +43,8 @@ items:
           - name: FONTSTACK_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: fontstack
-                name: fontstack_password
+                name: fontstack
+                key: fontstackpassword
           image: hsldevcom/hsl-map-server
           name: hsl-map-server
           ports:
