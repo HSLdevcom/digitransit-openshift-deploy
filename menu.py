@@ -8,6 +8,7 @@ from re import findall
 from subprocess import PIPE, Popen
 
 from appdirs import user_config_dir
+from blessings import Terminal
 import cmd2
 from ruamel import yaml
 
@@ -22,6 +23,7 @@ readline.set_completer_delims(readline.get_completer_delims().replace('-', ''))
 CONFIG_PATH = path.join(user_config_dir('dt-openshift-deploy', 'digitransit'),
                         'dt-openshift-deploy.yaml')
 OS_TYPES = ('svc', 'dc', 'route')
+term = Terminal()
 
 
 class DeployShell(cmd2.Cmd, object):
@@ -158,27 +160,37 @@ class DeployShell(cmd2.Cmd, object):
         self.oc_cmd('create', 'secret', 'generic', name,
                     '--from-literal=' + key + '=' + value)
 
-    def do_mem(self, arg):
+    def do_top(self, arg):
         p = Popen([self.config['oc_path'], 'get', 'pods'], stdout=PIPE)
         p.wait()
         p.stdout.readline()
-        print('{:<45} {:>12} {:>12} {:>12}'.format('POD', 'Used memory', 'Free memory', '+- swap/cache'))
-        for pod in (x.split()[0] for x in p.stdout.readlines()):
-            # Without -T the oc rsh will bork the shell (actually tty) echoing
-            ps = Popen([self.config['oc_path'], 'rsh', '-T', pod,
-                        'ps', 'vwx', '--sort', 'rss'],
-                       stdout=PIPE)
-            free = Popen([self.config['oc_path'], 'rsh', '-T', pod, 'free', '-m'],
-                         stdout=PIPE)
-            ps.wait()
-            free.wait()
-            ps.stdout.readline()
-            free.stdout.readline()
-            print('{:<45} {:>11}M {:>11}M {:>11}M'.format(
-                pod,
-                sum((int(x.split()[7]) for x in ps.stdout.readlines())) / 1000,
-                free.stdout.readline().split()[3],
-                free.stdout.readline().split()[3]))
+        pods = [x.split()[0] for x in p.stdout if x.split()[2] == 'Running']
+        # Without -T the oc rsh will bork the shell (actually tty) echoing
+        stats = {pod: Popen([self.config['oc_path'], 'rsh', '-T', pod,
+                             'vmstat', '-n', '-SM', '4'], stdout=PIPE)
+                 for pod in pods}
+        for stat in stats.values():
+            stat.stdout.readline()
+            stat.stdout.readline()
+        with term.fullscreen():
+            format = '{:>5} {:>5} {:>5} {:>5}   {:>4} {:>6} {:>4} {:>4}'
+            print(format.format('used', 'free', 'buff', 'cache', 'user', 'system', 'idle', 'wait'))
+            while True:
+                print(term.move(0, 2))
+                ps = {pod: Popen([self.config['oc_path'], 'rsh', '-T', pod,
+                                  'ps', 'vwx', '--sort', 'rss'],
+                                 stdout=PIPE)
+                      for pod in pods}
+                for pod in pods:
+                    print(pod)
+                    ps[pod].stdout.readline()
+                    s = stats[pod].stdout.readline().split()
+                    print(format.format(
+                        sum((int(x.split()[7]) for x in ps[pod].stdout)) / 1000,
+                        s[3], s[4], s[5], s[12], s[13], s[14], s[15]))
+        print('Stopping')
+        for p in stats:
+            p.terminate()
 
     def do_eof(self, arg):
         print()  # Clear line, like when quitting with quit
