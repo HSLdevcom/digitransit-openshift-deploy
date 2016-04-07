@@ -11,6 +11,7 @@ from os import path
 here = path.abspath(path.dirname(__file__))
 requirements = [
     'appdirs',
+    'blessings',
     'cmd2',
     'ruamel.yaml',
     'six'
