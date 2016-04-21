@@ -19,3 +19,13 @@ You can create it with::
 digitransit-ui needs SENTRY_DSN and SENTRY_SECRET_DSN. Create them with::
 
     oc create secret generic sentry --from-literal=sentrydsn=https://SENTRY_USER@app.getsentry.com/SENTRY_ID --from-literal=sentrysecretdsn=https://SENTRY_USER:SENTRY_PW@app.getsentry.com/SENTRY_ID
+
+# How to create service from scratch?
+
+1. recreate dc digitransit-ui-hsl
+
+2. recreate svc digitransit-ui-hsl
+
+# How to deploy new version of image?
+
+1. deploy_image digitransit-ui-hsl
