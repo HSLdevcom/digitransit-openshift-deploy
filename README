@@ -1,3 +1,5 @@
+# Installation
+
 Install the script and requirements globally::
 
     pip install -e .
@@ -10,22 +12,53 @@ Run (from project root containing data folders)::
 
     dt_os_menu
 
-hsl-map-server needs FONTSTACK_PASSWORD env variable, that's
-populated from fontstack secret, key fontstack_password.
-You can create it with::
+# Creating OpenShift project
 
-    oc create secret generic fontstack --from-literal=fontstackpassword=foobar
+First, you should create an openshift project and select that by: `oc project`
 
-digitransit-ui needs SENTRY_DSN and SENTRY_SECRET_DSN. Create them with::
+# Configuring environment
 
-    oc create secret generic sentry --from-literal=sentrydsn=https://SENTRY_USER@app.getsentry.com/SENTRY_ID --from-literal=sentrysecretdsn=https://SENTRY_USER:SENTRY_PW@app.getsentry.com/SENTRY_ID
+All configuration variables should be stored in OpenShift secrets:
+https://docs.openshift.com/enterprise/3.1/dev_guide/secrets.html
 
-# How to create service from scratch?
+Secrets can be created:
 
-1. recreate dc digitransit-ui-hsl
+ - oc create secret generic {name} --from-literal=key=val
 
-2. recreate svc digitransit-ui-hsl
+## HSL Map Server
 
-# How to deploy new version of image?
+Configure variables for: `fontstack`
 
-1. deploy_image digitransit-ui-hsl
+- oc create secret generic fontstack --from-literal=fontstackpassword=INSERT
+
+## Digitransit-ui
+
+Configure variables for: `sentry`, `piwik`, `api_url`
+
+- oc create secret generic sentry --from-literal=sentrydsn=https://SENTRY_USER@app.getsentry.com/SENTRY_ID --from-literal=sentrysecretdsn=https://SENTRY_USER:SENTRY_PW@app.getsentry.com/SENTRY_ID
+- oc create secret generic piwik --from-literal=id-hsl=INSERT --from-literal=id-default=INSERT --from-literal=address=//piwik.digitransit.fi/piwik.php
+- oc create secret generic api-url --from-literal=api-url=INSERT
+
+Examples for piwik and api_url:
+
+**DEV**:
+
+- oc create secret generic piwik --from-literal=id-hsl=5 --from-literal=id-default=7 --from-literal=address=//piwik.digitransit.fi/piwik.php
+- oc create secret generic api-url --from-literal=api-url=http://dev.api.digitransit.fi
+
+**TEST**:
+
+- oc create secret generic piwik --from-literal=id-hsl=4 --from-literal=id-default=6 --from-literal=address=//piwik.digitransit.fi/piwik.php
+- oc create secret generic api-url --from-literal=api-url=http://api.digitransit.fi
+
+# Create Deployment configs and services
+
+Using dt_os_menu, run `recreate dc all` and after that `recreate svc all`
+
+# Deploy new version of image
+
+Using dt_os_menu, run `deploy_image {name}`
+
+# Listing all variables in secrets
+
+Using dt_os_menu, run `secrets clear`
