@@ -46,6 +46,21 @@ items:
               secretKeyRef:
                 name: sentry
                 key: sentrysecretdsn
+          - name: PIWIK_ID
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: id-hsl
+          - name: PIWIK_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: address
+          - name: API_URL
+            valueFrom:
+              secretKeyRef:
+                name: api-url
+                key: api-url
           image: hsldevcom/digitransit-ui
           name: digitransit-ui-hsl
           ports:
