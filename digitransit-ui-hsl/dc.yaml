@@ -61,7 +61,7 @@ items:
         - digitransit-ui-hsl
         from:
           kind: ImageStreamTag
-          name: digitransit-ui:latest
+          name: digitransit-ui-hsl:latest
       type: ImageChange
   status: {}
 kind: List
