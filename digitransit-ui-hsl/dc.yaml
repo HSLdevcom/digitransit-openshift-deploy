@@ -30,6 +30,8 @@ items:
         labels:
           app: digitransit-ui-hsl
       spec:
+        nodeSelector:
+          role: general
         containers:
         - env:
           - name: CONFIG

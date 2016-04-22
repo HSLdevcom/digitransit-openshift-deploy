@@ -38,6 +38,8 @@ items:
           app: pelias-api
           deploymentconfig: pelias-api
       spec:
+        nodeSelector:
+          role: general
         containers:
         - image: hsldevcom/pelias-api
           name: pelias-api
