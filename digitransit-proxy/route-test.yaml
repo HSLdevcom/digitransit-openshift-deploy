@@ -135,7 +135,7 @@ items:
       app: default
     name: default
   spec:
-    host: dev.digitransit.fi
+    host: beta.digitransit.fi
     port:
       targetPort: 8080-tcp
     to:
@@ -160,7 +160,7 @@ items:
       app: reittiopas
     name: reittiopas
   spec:
-    host: dev.reittiopas.fi
+    host: beta.reittiopas.fi
     port:
       targetPort: 8080-tcp
     to:
