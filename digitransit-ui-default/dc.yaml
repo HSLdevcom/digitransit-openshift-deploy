@@ -61,6 +61,11 @@ items:
               secretKeyRef:
                 name: api-url
                 key: api-url
+          - name: MAP_URL
+            valueFrom:
+              secretKeyRef:
+                name: map-url
+                key: map-url
           image: hsldevcom/digitransit-ui
           name: digitransit-ui-default
           ports:
