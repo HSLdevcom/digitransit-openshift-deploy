@@ -41,6 +41,20 @@ items:
         containers:
         - image: hsldevcom/opentripplanner-data-container
           name: opentripplanner-data-container
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 1
           ports:
           - containerPort: 8080
             protocol: TCP

@@ -47,6 +47,20 @@ items:
                 key: fontstackpassword
           image: hsldevcom/hsl-map-server
           name: hsl-map-server
+          livenessProbe:
+            httpGet:
+              path: /hsl-map/index.json
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /hsl-map/index.json
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 1
           ports:
           - containerPort: 8080
             protocol: TCP

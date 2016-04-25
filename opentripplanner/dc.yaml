@@ -31,6 +31,12 @@ items:
       deploymentconfig: opentripplanner
     strategy:
       resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 3600
+        updatePeriodSeconds: 1
     template:
       metadata:
         creationTimestamp: null
@@ -44,6 +50,20 @@ items:
           - name: OTP_DATA_CONTAINER_URL
             value: http://opentripplanner-data-con:8080
           name: opentripplanner
+          livenessProbe:
+            httpGet:
+              path: /otp
+              port: 8080
+            initialDelaySeconds: 3600
+            timeoutSeconds: 10
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /otp
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            periodSeconds: 2
           ports:
           - containerPort: 8080
             protocol: TCP

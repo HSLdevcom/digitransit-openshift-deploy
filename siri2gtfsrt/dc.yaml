@@ -48,6 +48,13 @@ items:
             value: http://hslalert:8080/
           image: hsldevcom/siri2gtfsrt
           name: siri2gtfsrt
+          livenessProbe:
+            httpGet:
+              path: /HSL
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 60
+            periodSeconds: 300
           ports:
           - containerPort: 8080
             protocol: TCP
