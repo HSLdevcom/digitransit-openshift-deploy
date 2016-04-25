@@ -38,18 +38,21 @@ Configure variables for: `sentry`, `piwik`, `api_url`
 - oc create secret generic sentry --from-literal=sentrydsn=https://SENTRY_USER@app.getsentry.com/SENTRY_ID --from-literal=sentrysecretdsn=https://SENTRY_USER:SENTRY_PW@app.getsentry.com/SENTRY_ID
 - oc create secret generic piwik --from-literal=id-hsl=INSERT --from-literal=id-default=INSERT --from-literal=address=//piwik.digitransit.fi/piwik.php
 - oc create secret generic api-url --from-literal=api-url=INSERT
+- oc create secret generic map-url --from-literal=map-url=INSERT
 
 Examples for piwik and api_url:
 
 **DEV**:
 
 - oc create secret generic piwik --from-literal=id-hsl=5 --from-literal=id-default=7 --from-literal=address=//piwik.digitransit.fi/piwik.php
-- oc create secret generic api-url --from-literal=api-url=http://dev.api.digitransit.fi
+- oc create secret generic api-url --from-literal=api-url=http://dev-api.digitransit.fi
+- oc create secret generic map-url --from-literal=map-url=http://{s}-dev-api.digitransit.fi
 
 **TEST**:
 
 - oc create secret generic piwik --from-literal=id-hsl=4 --from-literal=id-default=6 --from-literal=address=//piwik.digitransit.fi/piwik.php
 - oc create secret generic api-url --from-literal=api-url=http://api.digitransit.fi
+- oc create secret generic map-url --from-literal=map-url=http://{s}-api.digitransit.fi
 
 # Create Deployment configs and services
 
@@ -58,6 +61,16 @@ Using dt_os_menu, run `recreate dc all` and after that `recreate svc all`
 # Deploy new version of image
 
 Using dt_os_menu, run `deploy_image {name}`
+
+# Configuring OpenShift routes
+
+Routes should be configured in three steps:
+
+1. DEV ENV: using dt_os_menu run `recreate route-dev digitransit-proxy`
+
+2. TEST ENV: using dt_os_menu run `recreate route-test digitransit-proxy`
+
+3. Configure correct TLS keys manually for both projects using OpenShift tools
 
 # Listing all variables in secrets
 
