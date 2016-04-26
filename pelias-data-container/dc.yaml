@@ -31,6 +31,12 @@ items:
       deploymentconfig: pelias-data-container
     strategy:
       resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 3600
+        updatePeriodSeconds: 1
     template:
       metadata:
         creationTimestamp: null
@@ -43,6 +49,20 @@ items:
         containers:
         - image: hsldevcom/pelias-data-container
           name: pelias-data-container
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9200
+            initialDelaySeconds: 120
+            timeoutSeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9200
+            initialDelaySeconds: 120
+            timeoutSeconds: 10
+            periodSeconds: 2
           ports:
           - containerPort: 9200
             protocol: TCP

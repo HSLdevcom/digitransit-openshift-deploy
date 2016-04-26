@@ -36,6 +36,20 @@ items:
         - env:
           image: hsldevcom/digitransit-site
           name: digitransit-site
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
           ports:
           - containerPort: 8080
             protocol: TCP

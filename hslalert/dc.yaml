@@ -43,6 +43,20 @@ items:
         containers:
         - image: hsldevcom/hslalert
           name: hslalert
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 2
           ports:
           - containerPort: 8080
             protocol: TCP

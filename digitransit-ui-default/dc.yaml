@@ -68,6 +68,20 @@ items:
                 key: map-url
           image: hsldevcom/digitransit-ui
           name: digitransit-ui-default
+          livenessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 2
           ports:
           - containerPort: 8080
             protocol: TCP

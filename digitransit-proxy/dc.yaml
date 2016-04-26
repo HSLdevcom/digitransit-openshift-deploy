@@ -43,6 +43,20 @@ items:
         containers:
         - image: hsldevcom/digitransit-proxy
           name: digitransit-proxy
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 15
+            timeoutSeconds: 2
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 1
           ports:
           - containerPort: 80
             protocol: TCP

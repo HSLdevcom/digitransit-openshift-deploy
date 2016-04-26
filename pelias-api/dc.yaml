@@ -43,6 +43,20 @@ items:
         containers:
         - image: hsldevcom/pelias-api
           name: pelias-api
+          livenessProbe:
+            httpGet:
+              path: /v1
+              port: 8080
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /v1
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+            periodSeconds: 1
           ports:
           - containerPort: 8080
             protocol: TCP

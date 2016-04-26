@@ -46,6 +46,13 @@ items:
             value: http://opentripplanner-data-con:8080/router-finland.zip
           image: hsldevcom/raildigitraffic2gtfsrt
           name: raildigitraffic2gtfsrt
+          livenessProbe:
+            httpGet:
+              path: /hsl
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 60
+            periodSeconds: 300
           ports:
           - containerPort: 8080
             protocol: TCP
