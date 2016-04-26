@@ -44,6 +44,8 @@ items:
           app: pelias-data-container
           deploymentconfig: pelias-data-container
       spec:
+        nodeSelector:
+          role: general
         containers:
         - image: hsldevcom/pelias-data-container
           name: pelias-data-container

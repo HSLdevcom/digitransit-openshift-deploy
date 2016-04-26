@@ -5,16 +5,10 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: raildigitraffic2gtfsrt
-    name: raildigitraffic2gtfsrt
+      app: digitransit-site
+    name: digitransit-site
   spec:
-    tags:
-    - from:
-        kind: DockerImage
-        name: hsldevcom/raildigitraffic2gtfsrt
-      generation: null
-      importPolicy: {}
-      name: latest
+    dockerImageRepository: hsldevcom/digitransit-site
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -22,53 +16,56 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: raildigitraffic2gtfsrt
-    name: raildigitraffic2gtfsrt
+      app: digitransit-site
+    name: digitransit-site
   spec:
     replicas: 1
     selector:
-      app: raildigitraffic2gtfsrt
-      deploymentconfig: raildigitraffic2gtfsrt
+      app: digitransit-site
     strategy:
       resources: {}
     template:
       metadata:
         creationTimestamp: null
         labels:
-          app: raildigitraffic2gtfsrt
-          deploymentconfig: raildigitraffic2gtfsrt
+          app: digitransit-site
       spec:
         nodeSelector:
           role: general
         containers:
         - env:
-          - name: ROUTER_ZIP_URL
-            value: http://opentripplanner-data-con:8080/router-finland.zip
-          image: hsldevcom/raildigitraffic2gtfsrt
-          name: raildigitraffic2gtfsrt
+          image: hsldevcom/digitransit-site
+          name: digitransit-site
           livenessProbe:
             httpGet:
-              path: /hsl
+              path: /
               port: 8080
             initialDelaySeconds: 60
-            timeoutSeconds: 60
-            periodSeconds: 300
+            timeoutSeconds: 5
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
           ports:
           - containerPort: 8080
             protocol: TCP
           resources:
             requests:
-              memory: 1000Mi
+              memory: 100Mi
     test: false
     triggers:
     - type: ConfigChange
     - imageChangeParams:
         automatic: true
         containerNames:
-        - raildigitraffic2gtfsrt
+        - digitransit-site
         from:
           kind: ImageStreamTag
-          name: raildigitraffic2gtfsrt:latest
+          name: digitransit-site:latest
       type: ImageChange
   status: {}
 kind: List

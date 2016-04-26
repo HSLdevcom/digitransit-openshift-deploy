@@ -38,6 +38,8 @@ items:
           app: navigator-server
           deploymentconfig: navigator-server
       spec:
+        nodeSelector:
+          role: general
         containers:
         - image: hsldevcom/navigator-server
           name: navigator-server

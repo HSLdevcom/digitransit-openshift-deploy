@@ -5,8 +5,8 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: digitransit-ui
-    name: digitransit-ui
+      app: digitransit-ui-hsl
+    name: digitransit-ui-hsl
   spec:
     dockerImageRepository: hsldevcom/digitransit-ui
   status:
@@ -16,22 +16,26 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: digitransit-ui
-    name: digitransit-ui
+      app: digitransit-ui-hsl
+    name: digitransit-ui-hsl
   spec:
     replicas: 1
     selector:
-      app: digitransit-ui
+      app: digitransit-ui-hsl
     strategy:
       resources: {}
     template:
       metadata:
         creationTimestamp: null
         labels:
-          app: digitransit-ui
+          app: digitransit-ui-hsl
       spec:
+        nodeSelector:
+          role: general
         containers:
         - env:
+          - name: CONFIG
+            value: hsl
           - name: SENTRY_DSN
             valueFrom:
               secretKeyRef:
@@ -42,8 +46,28 @@ items:
               secretKeyRef:
                 name: sentry
                 key: sentrysecretdsn
+          - name: PIWIK_ID
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: id-hsl
+          - name: PIWIK_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: address
+          - name: API_URL
+            valueFrom:
+              secretKeyRef:
+                name: api-url
+                key: api-url
+          - name: MAP_URL
+            valueFrom:
+              secretKeyRef:
+                name: map-url
+                key: map-url
           image: hsldevcom/digitransit-ui
-          name: digitransit-ui
+          name: digitransit-ui-hsl
           livenessProbe:
             httpGet:
               path: /favicon.ico
@@ -70,10 +94,10 @@ items:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - digitransit-ui
+        - digitransit-ui-hsl
         from:
           kind: ImageStreamTag
-          name: digitransit-ui:latest
+          name: digitransit-ui-hsl:latest
       type: ImageChange
   status: {}
 kind: List

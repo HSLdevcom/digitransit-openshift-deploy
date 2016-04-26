@@ -44,6 +44,8 @@ items:
           app: opentripplanner
           deploymentconfig: opentripplanner
       spec:
+        nodeSelector:
+          role: routing
         containers:
         - image: hsldevcom/opentripplanner
           env:
