@@ -1,0 +1,179 @@
+apiVersion: v1
+kind: List
+metadata: {}
+items:
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: api
+    name: api
+  spec:
+    host: api.digitransit.fi
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: digitransit-proxy
+    tls:
+      termination: edge
+      key: |-
+        -----BEGIN PRIVATE KEY-----
+        INSERT
+        -----END PRIVATE KEY-----
+      certificate: |-
+        -----BEGIN CERTIFICATE-----
+        INSERT
+        -----END CERTIFICATE-----
+      insecureEdgeTerminationPolicy: Allow
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: a-api
+    name: a-api
+  spec:
+    host: a-api.digitransit.fi
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: digitransit-proxy
+    tls:
+      termination: edge
+      key: |-
+        -----BEGIN PRIVATE KEY-----
+        INSERT
+        -----END PRIVATE KEY-----
+      certificate: |-
+        -----BEGIN CERTIFICATE-----
+        INSERT
+        -----END CERTIFICATE-----
+      insecureEdgeTerminationPolicy: Allow
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: b-api
+    name: b-api
+  spec:
+    host: b-api.digitransit.fi
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: digitransit-proxy
+    tls:
+      termination: edge
+      key: |-
+        -----BEGIN PRIVATE KEY-----
+        INSERT
+        -----END PRIVATE KEY-----
+      certificate: |-
+        -----BEGIN CERTIFICATE-----
+        INSERT
+        -----END CERTIFICATE-----
+      insecureEdgeTerminationPolicy: Allow
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: c-api
+    name: c-api
+  spec:
+    host: c-api.digitransit.fi
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: digitransit-proxy
+    tls:
+      termination: edge
+      key: |-
+        -----BEGIN PRIVATE KEY-----
+        INSERT
+        -----END PRIVATE KEY-----
+      certificate: |-
+        -----BEGIN CERTIFICATE-----
+        INSERT
+        -----END CERTIFICATE-----
+      insecureEdgeTerminationPolicy: Allow
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit
+    name: digitransit
+  spec:
+    host: digitransit.fi
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: digitransit-proxy
+    tls:
+      termination: edge
+      key: |-
+        -----BEGIN PRIVATE KEY-----
+        INSERT
+        -----END PRIVATE KEY-----
+      certificate: |-
+        -----BEGIN CERTIFICATE-----
+        INSERT
+        -----END CERTIFICATE-----
+      insecureEdgeTerminationPolicy: Allow
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: default
+    name: default
+  spec:
+    host: beta.digitransit.fi
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: digitransit-proxy
+    tls:
+      termination: edge
+      key: |-
+        -----BEGIN PRIVATE KEY-----
+        INSERT
+        -----END PRIVATE KEY-----
+      certificate: |-
+        -----BEGIN CERTIFICATE-----
+        INSERT
+        -----END CERTIFICATE-----
+      insecureEdgeTerminationPolicy: Allow
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: reittiopas
+    name: reittiopas
+  spec:
+    host: beta.reittiopas.fi
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: digitransit-proxy
+    tls:
+      termination: edge
+      key: |-
+        -----BEGIN PRIVATE KEY-----
+        INSERT
+        -----END PRIVATE KEY-----
+      certificate: |-
+        -----BEGIN CERTIFICATE-----
+        INSERT
+        -----END CERTIFICATE-----
+      insecureEdgeTerminationPolicy: Allow

@@ -1,0 +1,90 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-default
+    name: digitransit-ui-default
+  spec:
+    dockerImageRepository: hsldevcom/digitransit-ui
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-default
+    name: digitransit-ui-default
+  spec:
+    replicas: 1
+    selector:
+      app: digitransit-ui-default
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: digitransit-ui-default
+      spec:
+        nodeSelector:
+          role: general
+        containers:
+        - env:
+          - name: CONFIG
+            value: default
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrydsn
+          - name: SENTRY_SECRET_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrysecretdsn
+          - name: PIWIK_ID
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: id-default
+          - name: PIWIK_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: address
+          - name: API_URL
+            valueFrom:
+              secretKeyRef:
+                name: api-url
+                key: api-url
+          - name: MAP_URL
+            valueFrom:
+              secretKeyRef:
+                name: map-url
+                key: map-url
+          image: hsldevcom/digitransit-ui
+          name: digitransit-ui-default
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources:
+            requests:
+              memory: 100Mi
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - digitransit-ui-default
+        from:
+          kind: ImageStreamTag
+          name: digitransit-ui-default:latest
+      type: ImageChange
+  status: {}
+kind: List
+metadata: {}

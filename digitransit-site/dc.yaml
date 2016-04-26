@@ -5,16 +5,10 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: digitransit-proxy
-    name: digitransit-proxy
+      app: digitransit-site
+    name: digitransit-site
   spec:
-    tags:
-    - from:
-        kind: DockerImage
-        name: hsldevcom/digitransit-proxy
-      generation: null
-      importPolicy: {}
-      name: latest
+    dockerImageRepository: hsldevcom/digitransit-site
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -22,47 +16,42 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: digitransit-proxy
-    name: digitransit-proxy
+      app: digitransit-site
+    name: digitransit-site
   spec:
     replicas: 1
     selector:
-      app: digitransit-proxy
-      deploymentconfig: digitransit-proxy
+      app: digitransit-site
     strategy:
       resources: {}
     template:
       metadata:
         creationTimestamp: null
         labels:
-          app: digitransit-proxy
-          deploymentconfig: digitransit-proxy
+          app: digitransit-site
       spec:
         nodeSelector:
           role: general
         containers:
-        - image: hsldevcom/digitransit-proxy
-          name: digitransit-proxy
+        - env:
+          image: hsldevcom/digitransit-site
+          name: digitransit-site
           ports:
-          - containerPort: 80
-            protocol: TCP
-          - containerPort: 443
-            protocol: TCP
           - containerPort: 8080
             protocol: TCP
           resources:
             requests:
-              memory: 20Mi
+              memory: 100Mi
     test: false
     triggers:
     - type: ConfigChange
     - imageChangeParams:
         automatic: true
         containerNames:
-        - digitransit-proxy
+        - digitransit-site
         from:
           kind: ImageStreamTag
-          name: digitransit-proxy:latest
+          name: digitransit-site:latest
       type: ImageChange
   status: {}
 kind: List

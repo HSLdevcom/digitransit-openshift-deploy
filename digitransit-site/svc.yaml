@@ -5,8 +5,8 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: digitransit-ui
-    name: digitransit-ui
+      app: digitransit-site
+    name: digitransit-site
   spec:
     ports:
     - name: 8080-tcp
@@ -14,7 +14,7 @@ items:
       protocol: TCP
       targetPort: 8080
     selector:
-      app: digitransit-ui
+      app: digitransit-site
   status:
     loadBalancer: {}
 kind: List

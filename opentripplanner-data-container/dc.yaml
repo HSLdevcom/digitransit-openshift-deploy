@@ -38,6 +38,8 @@ items:
           app: opentripplanner-data-container
           deploymentconfig: opentripplanner-data-container
       spec:
+        nodeSelector:
+          role: general
         containers:
         - image: hsldevcom/opentripplanner-data-container
           name: opentripplanner-data-container
