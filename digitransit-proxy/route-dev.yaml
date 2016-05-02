@@ -26,7 +26,7 @@ items:
         -----BEGIN CERTIFICATE-----
         INSERT
         -----END CERTIFICATE-----
-      insecureEdgeTerminationPolicy: Redirect
+      insecureEdgeTerminationPolicy: Allow
 - apiVersion: v1
   kind: Route
   metadata:
@@ -51,7 +51,7 @@ items:
         -----BEGIN CERTIFICATE-----
         INSERT
         -----END CERTIFICATE-----
-      insecureEdgeTerminationPolicy: Redirect
+      insecureEdgeTerminationPolicy: Allow
 - apiVersion: v1
   kind: Route
   metadata:
@@ -76,7 +76,7 @@ items:
         -----BEGIN CERTIFICATE-----
         INSERT
         -----END CERTIFICATE-----
-      insecureEdgeTerminationPolicy: Redirect
+      insecureEdgeTerminationPolicy: Allow
 - apiVersion: v1
   kind: Route
   metadata:
@@ -101,7 +101,7 @@ items:
         -----BEGIN CERTIFICATE-----
         INSERT
         -----END CERTIFICATE-----
-      insecureEdgeTerminationPolicy: Redirect
+      insecureEdgeTerminationPolicy: Allow
 - apiVersion: v1
   kind: Route
   metadata:
@@ -176,4 +176,4 @@ items:
         -----BEGIN CERTIFICATE-----
         INSERT
         -----END CERTIFICATE-----
-      insecureEdgeTerminationPolicy: Allow
+      insecureEdgeTerminationPolicy: Redirect
