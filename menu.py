@@ -166,17 +166,21 @@ class DeployShell(cmd2.Cmd, object):
         p.stdout.readline()
         pods = [x.split()[0] for x in p.stdout if x.split()[2] == 'Running']
         # Without -T the oc rsh will bork the shell (actually tty) echoing
-        stats = {pod: Popen([self.config['oc_path'], 'rsh', '-T', pod,
-                             'vmstat', '-n', '-SM', '4'], stdout=PIPE)
-                 for pod in pods}
-        for stat in stats.values():
-            stat.stdout.readline()
-            stat.stdout.readline()
+        stats = {}
+        for pod in pods:
+            print("Opening pipe to %s" % pod)
+            stats[pod] = Popen([self.config['oc_path'], 'rsh', '-T', pod,
+                                'vmstat', '-n', '-SM', '4'], stdout=PIPE)
+        for pod in pods:
+            print("Reading stats from %s" % pod)
+            stats[pod].stdout.readline()
+            stats[pod].stdout.readline()
         with term.fullscreen():
             format = '{:>5} {:>5} {:>5} {:>5}   {:>4} {:>6} {:>4} {:>4}'
+            print(term.move(0, 0))
             print(format.format('used', 'free', 'buff', 'cache', 'user', 'system', 'idle', 'wait'))
             while True:
-                print(term.move(0, 2))
+                print(term.move(1, 0))
                 ps = {pod: Popen([self.config['oc_path'], 'rsh', '-T', pod,
                                   'ps', 'vwx', '--sort', 'rss'],
                                  stdout=PIPE)
@@ -185,9 +189,14 @@ class DeployShell(cmd2.Cmd, object):
                     print(pod)
                     ps[pod].stdout.readline()
                     s = stats[pod].stdout.readline().split()
-                    print(format.format(
-                        sum((int(x.split()[7]) for x in ps[pod].stdout)) / 1000,
-                        s[3], s[4], s[5], s[12], s[13], s[14], s[15]))
+                    try:
+                        print(format.format(
+                            sum((int(x.split()[7]) for x in ps[pod].stdout)) / 1000,
+                            s[3], s[4], s[5], s[12], s[13], s[14], s[15]))
+                    except:
+                        print(s)
+                        from time import sleep
+                        sleep(10)
         print('Stopping')
         for p in stats:
             p.terminate()
