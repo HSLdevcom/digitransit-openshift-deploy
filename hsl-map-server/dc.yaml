@@ -47,6 +47,10 @@ items:
               secretKeyRef:
                 name: fontstack
                 key: fontstackpassword
+          - name: OTP_URL
+            value: opentripplanner
+          - name: OTP_PORT
+            value: "8080"
           image: hsldevcom/hsl-map-server
           name: hsl-map-server
           livenessProbe:
