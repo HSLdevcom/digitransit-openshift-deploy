@@ -126,7 +126,7 @@ items:
         -----BEGIN CERTIFICATE-----
         INSERT
         -----END CERTIFICATE-----
-      insecureEdgeTerminationPolicy: Allow
+      insecureEdgeTerminationPolicy: Redirect
 - apiVersion: v1
   kind: Route
   metadata:
@@ -151,7 +151,7 @@ items:
         -----BEGIN CERTIFICATE-----
         INSERT
         -----END CERTIFICATE-----
-      insecureEdgeTerminationPolicy: Allow
+      insecureEdgeTerminationPolicy: Redirect
 - apiVersion: v1
   kind: Route
   metadata:
@@ -176,4 +176,4 @@ items:
         -----BEGIN CERTIFICATE-----
         INSERT
         -----END CERTIFICATE-----
-      insecureEdgeTerminationPolicy: Allow
+      insecureEdgeTerminationPolicy: Redirect
