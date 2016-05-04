@@ -25,7 +25,7 @@ items:
       app: hsl-map-server
     name: hsl-map-server
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       app: hsl-map-server
       deploymentconfig: hsl-map-server
@@ -39,7 +39,7 @@ items:
           deploymentconfig: hsl-map-server
       spec:
         nodeSelector:
-          role: general
+          mem: 8g
         containers:
         - env:
           - name: FONTSTACK_PASSWORD
@@ -72,6 +72,7 @@ items:
             protocol: TCP
           resources:
             requests:
+              cpu: 1000m
               memory: 1500Mi
     test: false
     triggers:

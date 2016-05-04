@@ -25,7 +25,7 @@ items:
       app: opentripplanner
     name: opentripplanner
   spec:
-    replicas: 1
+    replicas: 3
     selector:
       app: opentripplanner
       deploymentconfig: opentripplanner
@@ -44,8 +44,6 @@ items:
           app: opentripplanner
           deploymentconfig: opentripplanner
       spec:
-        nodeSelector:
-          role: routing
         containers:
         - image: hsldevcom/opentripplanner
           env:
@@ -54,14 +52,14 @@ items:
           name: opentripplanner
           livenessProbe:
             httpGet:
-              path: /otp
+              path: /otp/routers/default
               port: 8080
             initialDelaySeconds: 3600
             timeoutSeconds: 10
             periodSeconds: 60
           readinessProbe:
             httpGet:
-              path: /otp
+              path: /otp/routers/default
               port: 8080
             initialDelaySeconds: 60
             timeoutSeconds: 10
@@ -73,7 +71,10 @@ items:
             protocol: TCP
           resources:
             requests:
-              memory: 7500Mi
+              cpu: 4000m
+              memory: 10000Mi
+            limits:
+              memory: 10000Mi
           volumeMounts:
           - mountPath: /root/.m2
             name: opentripplanner-volume-1

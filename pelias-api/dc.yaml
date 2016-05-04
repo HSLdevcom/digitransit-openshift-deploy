@@ -25,7 +25,7 @@ items:
       app: pelias-api
     name: pelias-api
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       app: pelias-api
       deploymentconfig: pelias-api
@@ -39,7 +39,7 @@ items:
           deploymentconfig: pelias-api
       spec:
         nodeSelector:
-          role: general
+          mem: 8g
         containers:
         - image: hsldevcom/pelias-api
           name: pelias-api
@@ -62,6 +62,7 @@ items:
             protocol: TCP
           resources:
             requests:
+              cpu: 1000m
               memory: 800Mi
     test: false
     triggers:

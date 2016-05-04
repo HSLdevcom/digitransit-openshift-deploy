@@ -25,7 +25,7 @@ items:
       app: opentripplanner-data-container
     name: opentripplanner-data-container
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       app: opentripplanner-data-container
       deploymentconfig: opentripplanner-data-container
@@ -39,7 +39,7 @@ items:
           deploymentconfig: opentripplanner-data-container
       spec:
         nodeSelector:
-          role: general
+          mem: 8g
         containers:
         - image: hsldevcom/opentripplanner-data-container
           name: opentripplanner-data-container
@@ -62,6 +62,7 @@ items:
             protocol: TCP
           resources:
             requests:
+              cpu: 100m
               memory: 20Mi
           volumeMounts:
           - mountPath: /root/.m2

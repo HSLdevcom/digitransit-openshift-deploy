@@ -25,7 +25,7 @@ items:
       app: navigator-server
     name: navigator-server
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       app: navigator-server
       deploymentconfig: navigator-server
@@ -39,7 +39,7 @@ items:
           deploymentconfig: navigator-server
       spec:
         nodeSelector:
-          role: general
+          mem: 8g
         containers:
         - image: hsldevcom/navigator-server
           name: navigator-server
@@ -62,6 +62,7 @@ items:
             protocol: TCP
           resources:
             requests:
+              cpu: 1000m
               memory: 1500Mi
     test: false
     triggers:

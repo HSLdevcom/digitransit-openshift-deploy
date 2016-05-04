@@ -25,7 +25,7 @@ items:
       app: raildigitraffic2gtfsrt
     name: raildigitraffic2gtfsrt
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       app: raildigitraffic2gtfsrt
       deploymentconfig: raildigitraffic2gtfsrt
@@ -39,7 +39,7 @@ items:
           deploymentconfig: raildigitraffic2gtfsrt
       spec:
         nodeSelector:
-          role: general
+          mem: 8g
         containers:
         - env:
           - name: ROUTER_ZIP_URL
@@ -58,6 +58,7 @@ items:
             protocol: TCP
           resources:
             requests:
+              cpu: 1000m
               memory: 1000Mi
     test: false
     triggers:

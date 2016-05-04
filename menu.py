@@ -104,6 +104,27 @@ class DeployShell(cmd2.Cmd, object):
 
     complete_recreate = target_complete
 
+    def do_apply(self, arg):
+        '''apply TYPE NAME
+
+        Edit an OS resource in place.
+
+        NAME can be `all` to apply all targets of given type
+
+        Examples:
+            apply svc digitransit-proxy
+            apply dc all
+        '''
+        type, target = arg.split()
+        if target == 'all':
+            targets = dirswith(type)
+        else:
+            targets = [target]
+        for t in targets:
+            self.oc_cmd('apply', '-f', path.join(t, type + '.yaml'))
+
+    complete_apply = target_complete
+
     def do_deploy_image(self, arg):
         '''Deploy a new image from Docker Hub to OS registry.'''
         # TODO Should get the repositories (Docker image name) from within the yamls

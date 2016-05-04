@@ -25,7 +25,7 @@ items:
       app: digitransit-proxy
     name: digitransit-proxy
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       app: digitransit-proxy
       deploymentconfig: digitransit-proxy
@@ -39,7 +39,7 @@ items:
           deploymentconfig: digitransit-proxy
       spec:
         nodeSelector:
-          role: general
+          mem: 8g
         containers:
         - image: hsldevcom/digitransit-proxy
           name: digitransit-proxy
@@ -66,6 +66,7 @@ items:
             protocol: TCP
           resources:
             requests:
+              cpu: 500m
               memory: 20Mi
     test: false
     triggers:

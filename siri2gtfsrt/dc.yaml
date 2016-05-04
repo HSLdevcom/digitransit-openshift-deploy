@@ -25,7 +25,7 @@ items:
       app: siri2gtfsrt
     name: siri2gtfsrt
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       app: siri2gtfsrt
       deploymentconfig: siri2gtfsrt
@@ -39,7 +39,7 @@ items:
           deploymentconfig: siri2gtfsrt
       spec:
         nodeSelector:
-          role: general
+          mem: 8g
         containers:
         - env:
           - name: CHAIN_URL
@@ -62,6 +62,7 @@ items:
             protocol: TCP
           resources:
             requests:
+              cpu: 1000m
               memory: 150Mi
     test: false
     triggers:
