@@ -38,8 +38,6 @@ items:
           app: digitransit-proxy
           deploymentconfig: digitransit-proxy
       spec:
-        nodeSelector:
-          role: general
         containers:
         - image: hsldevcom/digitransit-proxy
           name: digitransit-proxy

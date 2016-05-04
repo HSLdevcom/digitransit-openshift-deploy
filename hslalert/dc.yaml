@@ -38,8 +38,6 @@ items:
           app: hslalert
           deploymentconfig: hslalert
       spec:
-        nodeSelector:
-          role: general
         containers:
         - image: hsldevcom/hslalert
           name: hslalert

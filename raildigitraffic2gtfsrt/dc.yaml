@@ -38,8 +38,6 @@ items:
           app: raildigitraffic2gtfsrt
           deploymentconfig: raildigitraffic2gtfsrt
       spec:
-        nodeSelector:
-          role: general
         containers:
         - env:
           - name: ROUTER_ZIP_URL

@@ -38,8 +38,6 @@ items:
           app: hsl-map-server
           deploymentconfig: hsl-map-server
       spec:
-        nodeSelector:
-          role: general
         containers:
         - env:
           - name: FONTSTACK_PASSWORD

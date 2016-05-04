@@ -30,8 +30,6 @@ items:
         labels:
           app: digitransit-site
       spec:
-        nodeSelector:
-          role: general
         containers:
         - env:
           image: hsldevcom/digitransit-site

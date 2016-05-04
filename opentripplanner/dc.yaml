@@ -44,8 +44,6 @@ items:
           app: opentripplanner
           deploymentconfig: opentripplanner
       spec:
-        nodeSelector:
-          role: routing
         containers:
         - image: hsldevcom/opentripplanner
           env:
@@ -73,7 +71,9 @@ items:
             protocol: TCP
           resources:
             requests:
-              memory: 7500Mi
+              memory: 10000Mi
+            limits:
+              memory: 10000Mi
           volumeMounts:
           - mountPath: /root/.m2
             name: opentripplanner-volume-1

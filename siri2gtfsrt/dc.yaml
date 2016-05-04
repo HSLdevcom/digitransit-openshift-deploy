@@ -38,8 +38,6 @@ items:
           app: siri2gtfsrt
           deploymentconfig: siri2gtfsrt
       spec:
-        nodeSelector:
-          role: general
         containers:
         - env:
           - name: CHAIN_URL
