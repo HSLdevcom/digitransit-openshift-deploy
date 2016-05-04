@@ -45,7 +45,7 @@ items:
           - name: CHAIN_URL
             value: http://raildigitraffic2gtfsrt:8080/hsl
           - name: HSL_URL
-            value: http://navigator-server:8080/siriaccess/vm/json
+            value: http://navigator-server:8080/siriaccess/vm/json?operatorRef=HSL
           - name: TRIP_UPDATE_URL
             value: http://hslalert:8080/
           image: hsldevcom/siri2gtfsrt
