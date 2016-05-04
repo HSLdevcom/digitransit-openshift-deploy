@@ -25,7 +25,7 @@ items:
       app: hslalert
     name: hslalert
   spec:
-    replicas: 1
+    replicas: 2
     selector:
       app: hslalert
       deploymentconfig: hslalert
@@ -38,6 +38,8 @@ items:
           app: hslalert
           deploymentconfig: hslalert
       spec:
+        nodeSelector:
+          mem: 8g
         containers:
         - image: hsldevcom/hslalert
           name: hslalert
@@ -60,6 +62,7 @@ items:
             protocol: TCP
           resources:
             requests:
+              cpu: 1000m
               memory: 40Mi
     test: false
     triggers:
