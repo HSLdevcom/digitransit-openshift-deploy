@@ -52,14 +52,14 @@ items:
           name: opentripplanner
           livenessProbe:
             httpGet:
-              path: /otp
+              path: /otp/routers/default
               port: 8080
             initialDelaySeconds: 3600
             timeoutSeconds: 10
             periodSeconds: 60
           readinessProbe:
             httpGet:
-              path: /otp
+              path: /otp/routers/default
               port: 8080
             initialDelaySeconds: 60
             timeoutSeconds: 10
