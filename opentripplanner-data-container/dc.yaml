@@ -64,6 +64,8 @@ items:
             requests:
               cpu: 100m
               memory: 20Mi
+            limits:
+              memory: 1000Mi
           volumeMounts:
           - mountPath: /root/.m2
             name: opentripplanner-data-container-volume-1
