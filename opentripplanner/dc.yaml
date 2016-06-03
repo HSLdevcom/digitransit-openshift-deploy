@@ -72,9 +72,9 @@ items:
           resources:
             requests:
               cpu: 4000m
-              memory: 10000Mi
+              memory: 14000Mi
             limits:
-              memory: 10000Mi
+              memory: 14000Mi
           volumeMounts:
           - mountPath: /root/.m2
             name: opentripplanner-volume-1

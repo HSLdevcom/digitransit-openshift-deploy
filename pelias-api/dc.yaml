@@ -65,7 +65,7 @@ items:
               cpu: 1000m
               memory: 800Mi
             limits:
-              memory: 2000Mi
+              memory: 800Mi
     test: false
     triggers:
     - type: ConfigChange
