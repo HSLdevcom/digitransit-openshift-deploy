@@ -1,0 +1,320 @@
+apiVersion: v1
+items:
+
+# Default
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-default
+    name: digitransit-ui-default
+  spec:
+    dockerImageRepository: hsldevcom/digitransit-ui
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-default
+    name: digitransit-ui-default
+  spec:
+    replicas: 2
+    selector:
+      app: digitransit-ui-default
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: digitransit-ui-default
+      spec:
+        nodeSelector:
+          mem: 8g
+        containers:
+        - env:
+          - name: CONFIG
+            value: default
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrydsn
+          - name: SENTRY_SECRET_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrysecretdsn
+          - name: PIWIK_ID
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: id-default
+          - name: PIWIK_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: address
+          - name: API_URL
+            valueFrom:
+              secretKeyRef:
+                name: api-url
+                key: api-url
+          - name: MAP_URL
+            valueFrom:
+              secretKeyRef:
+                name: map-url
+                key: map-url
+          image: hsldevcom/digitransit-ui
+          name: digitransit-ui-default
+          livenessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 2
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 100Mi
+            limits:
+              memory: 100Mi
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - digitransit-ui-default
+        from:
+          kind: ImageStreamTag
+          name: digitransit-ui-default:latest
+      type: ImageChange
+  status: {}
+
+# HSL
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-hsl
+    name: digitransit-ui-hsl
+  spec:
+    dockerImageRepository: hsldevcom/digitransit-ui
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-hsl
+    name: digitransit-ui-hsl
+  spec:
+    replicas: 2
+    selector:
+      app: digitransit-ui-hsl
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: digitransit-ui-hsl
+      spec:
+        nodeSelector:
+          mem: 8g
+        containers:
+        - env:
+          - name: CONFIG
+            value: hsl
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrydsn
+          - name: SENTRY_SECRET_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrysecretdsn
+          - name: PIWIK_ID
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: id-hsl
+          - name: PIWIK_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: address
+          - name: API_URL
+            valueFrom:
+              secretKeyRef:
+                name: api-url
+                key: api-url
+          - name: MAP_URL
+            valueFrom:
+              secretKeyRef:
+                name: map-url
+                key: map-url
+          image: hsldevcom/digitransit-ui
+          name: digitransit-ui-hsl
+          livenessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 2
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 100Mi
+            limits:
+              memory: 100Mi
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - digitransit-ui-hsl
+        from:
+          kind: ImageStreamTag
+          name: digitransit-ui-hsl:latest
+      type: ImageChange
+  status: {}
+
+# Joensuu
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-joensuu
+    name: digitransit-ui-joensuu
+  spec:
+    dockerImageRepository: hsldevcom/digitransit-ui
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-joensuu
+    name: digitransit-ui-joensuu
+  spec:
+    replicas: 2
+    selector:
+      app: digitransit-ui-joensuu
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: digitransit-ui-joensuu
+      spec:
+        nodeSelector:
+          mem: 8g
+        containers:
+        - env:
+          - name: CONFIG
+            value: joensuu
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrydsn
+          - name: SENTRY_SECRET_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrysecretdsn
+          - name: PIWIK_ID
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: id-joensuu
+          - name: PIWIK_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: address
+          - name: API_URL
+            valueFrom:
+              secretKeyRef:
+                name: api-url
+                key: api-url
+          - name: MAP_URL
+            valueFrom:
+              secretKeyRef:
+                name: map-url
+                key: map-url
+          image: hsldevcom/digitransit-ui
+          name: digitransit-ui-joensuu
+          livenessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 2
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 100Mi
+            limits:
+              memory: 100Mi
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - digitransit-ui-joensuu
+        from:
+          kind: ImageStreamTag
+          name: digitransit-ui-joensuu:latest
+      type: ImageChange
+  status: {}
+
+kind: List
+metadata: {}
