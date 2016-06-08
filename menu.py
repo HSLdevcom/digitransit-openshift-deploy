@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 from base64 import b64decode
+from glob import iglob
 from os import listdir, path
 from re import findall
 from subprocess import PIPE, Popen
@@ -130,14 +131,14 @@ class DeployShell(cmd2.Cmd, object):
         # TODO Should get the repositories (Docker image name) from within the yamls
         # TODO Hardcoded hsldevcom
         if arg == 'all':
-            targets = dirswith(type)
+            targets = get_target_names('is')
         else:
             targets = [arg]
         for t in targets:
             self.oc_cmd('import-image', 'hsldevcom/' + t)
 
     def complete_deploy_image(self, text='', line='', begidx=None, endidx=None):
-        choices = dirswith('dc') + ['all']
+        choices = get_target_names('is') + ['all']
         return [x + ' ' for x in choices if x.startswith(text)]
 
     def do_login(self, arg):
@@ -225,6 +226,30 @@ class DeployShell(cmd2.Cmd, object):
     def do_eof(self, arg):
         print()  # Clear line, like when quitting with quit
         return True
+
+
+def get_target_names(target_type):
+    if target_type == 'dc':
+        kind = 'DeploymentConfig'
+    elif target_type == 'is':
+        kind = 'ImageStream'
+    elif target_type == 'svc':
+        kind = 'Service'
+    elif target_type == 'route':
+        kind = 'Route'
+
+    results = []
+    for yamlfile in iglob('*/*.yaml'):
+        with open(yamlfile) as f:
+            y = yaml.safe_load(f)
+            if y['kind'] == 'List':
+                items = y['items']
+            else:
+                items = [y, ]
+            for i in items:
+                if i['kind'] == kind:
+                    results.append(i['metadata']['name'])
+    return results
 
 
 def dirswith(filename):
