@@ -25,7 +25,7 @@ items:
       app: opentripplanner
     name: opentripplanner
   spec:
-    replicas: 3
+    replicas: 2
     selector:
       app: opentripplanner
       deploymentconfig: opentripplanner
