@@ -34,7 +34,7 @@ items:
       rollingParams:
         intervalSeconds: 1
         maxSurge: 25%
-        maxUnavailable: 25%
+        maxUnavailable: 50%
         timeoutSeconds: 3600
         updatePeriodSeconds: 1
     template:

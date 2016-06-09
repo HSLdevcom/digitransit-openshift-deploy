@@ -89,10 +89,10 @@ items:
             protocol: TCP
           resources:
             requests:
-              cpu: 1000m
-              memory: 100Mi
+              cpu: 100m
+              memory: 600Mi
             limits:
-              memory: 100Mi
+              memory: 600Mi
     test: false
     triggers:
     - type: ConfigChange
@@ -194,10 +194,10 @@ items:
             protocol: TCP
           resources:
             requests:
-              cpu: 1000m
-              memory: 100Mi
+              cpu: 100m
+              memory: 600Mi
             limits:
-              memory: 100Mi
+              memory: 600Mi
     test: false
     triggers:
     - type: ConfigChange
@@ -299,10 +299,10 @@ items:
             protocol: TCP
           resources:
             requests:
-              cpu: 1000m
-              memory: 100Mi
+              cpu: 100m
+              memory: 600Mi
             limits:
-              memory: 100Mi
+              memory: 600Mi
     test: false
     triggers:
     - type: ConfigChange

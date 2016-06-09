@@ -55,7 +55,7 @@ items:
             protocol: TCP
           resources:
             requests:
-              cpu: 1000m
+              cpu: 100m
               memory: 100Mi
             limits:
               memory: 100Mi
