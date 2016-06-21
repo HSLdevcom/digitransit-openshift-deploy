@@ -1,0 +1,98 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: opentripplanner-waltti
+    name: opentripplanner-waltti
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: hsldevcom/opentripplanner
+      generation: null
+      importPolicy: {}
+      name: latest
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: opentripplanner-waltti
+    name: opentripplanner-waltti
+  spec:
+    replicas: 2
+    selector:
+      app: opentripplanner-waltti
+      deploymentconfig: opentripplanner-waltti
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 50%
+        timeoutSeconds: 3600
+        updatePeriodSeconds: 1
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: opentripplanner-waltti
+          deploymentconfig: opentripplanner-waltti
+      spec:
+        containers:
+        - image: hsldevcom/opentripplanner
+          env:
+          - name: ROUTER_DATA_CONTAINER_URL
+            value: http://opentripplanner-data-con:8080
+          - name: ROUTER_NAME
+            value: waltti
+          - name: JAVA_OPTS
+            value: -Xmx5000M -Xms5000M
+          name: opentripplanner-waltti
+          livenessProbe:
+            httpGet:
+              path: /otp/routers/default
+              port: 8080
+            initialDelaySeconds: 3600
+            timeoutSeconds: 10
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /otp/routers/default
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
+            periodSeconds: 2
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8081
+            protocol: TCP
+          resources:
+            requests:
+              cpu: 500m
+              memory: 5500Mi
+            limits:
+              memory: 5500Mi
+        volumes:
+        - emptyDir: {}
+          name: opentripplanner-volume-1
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - opentripplanner-waltti
+        from:
+          kind: ImageStreamTag
+          name: opentripplanner-waltti:latest
+      type: ImageChange
+  status: {}
+kind: List
+metadata: {}
