@@ -5,8 +5,8 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: opentripplanner
-    name: opentripplanner
+      app: opentripplanner-hsl
+    name: opentripplanner-hsl
   spec:
     ports:
     - name: 8080-tcp
@@ -18,7 +18,7 @@ items:
       protocol: TCP
       targetPort: 8081
     selector:
-      app: opentripplanner
+      app: opentripplanner-hsl
   status:
     loadBalancer: {}
 kind: List

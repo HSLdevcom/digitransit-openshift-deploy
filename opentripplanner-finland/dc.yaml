@@ -5,8 +5,8 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: opentripplanner
-    name: opentripplanner
+      app: opentripplanner-finland
+    name: opentripplanner-finland
   spec:
     tags:
     - from:
@@ -22,13 +22,13 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: opentripplanner
-    name: opentripplanner
+      app: opentripplanner-finland
+    name: opentripplanner-finland
   spec:
     replicas: 2
     selector:
-      app: opentripplanner
-      deploymentconfig: opentripplanner
+      app: opentripplanner-finland
+      deploymentconfig: opentripplanner-finland
     strategy:
       resources: {}
       rollingParams:
@@ -41,15 +41,19 @@ items:
       metadata:
         creationTimestamp: null
         labels:
-          app: opentripplanner
-          deploymentconfig: opentripplanner
+          app: opentripplanner-finland
+          deploymentconfig: opentripplanner-finland
       spec:
         containers:
         - image: hsldevcom/opentripplanner
           env:
-          - name: OTP_DATA_CONTAINER_URL
+          - name: ROUTER_DATA_CONTAINER_URL
             value: http://opentripplanner-data-con:8080
-          name: opentripplanner
+          - name: ROUTER_NAME
+            value: finland
+          - name: JAVA_OPTS
+            value: -Xmx5500M -Xms5500M
+          name: opentripplanner-finland
           livenessProbe:
             httpGet:
               path: /otp/routers/default
@@ -71,13 +75,10 @@ items:
             protocol: TCP
           resources:
             requests:
-              cpu: 4000m
-              memory: 14000Mi
+              cpu: 1000m
+              memory: 6000Mi
             limits:
-              memory: 14000Mi
-          volumeMounts:
-          - mountPath: /root/.m2
-            name: opentripplanner-volume-1
+              memory: 6000Mi
         volumes:
         - emptyDir: {}
           name: opentripplanner-volume-1
@@ -87,10 +88,10 @@ items:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - opentripplanner
+        - opentripplanner-finland
         from:
           kind: ImageStreamTag
-          name: opentripplanner:latest
+          name: opentripplanner-finland:latest
       type: ImageChange
   status: {}
 kind: List
