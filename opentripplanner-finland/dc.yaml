@@ -52,7 +52,7 @@ items:
           - name: ROUTER_NAME
             value: finland
           - name: JAVA_OPTS
-            value: -Xmx5500M -Xms5500M
+            value: -Xmx7000M -Xms7000M
           name: opentripplanner-finland
           livenessProbe:
             httpGet:
@@ -75,10 +75,10 @@ items:
             protocol: TCP
           resources:
             requests:
-              cpu: 1000m
-              memory: 6000Mi
+              cpu: 3000m
+              memory: 8000Mi
             limits:
-              memory: 6000Mi
+              memory: 8000Mi
         volumes:
         - emptyDir: {}
           name: opentripplanner-volume-1
