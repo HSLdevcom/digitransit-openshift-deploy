@@ -5,8 +5,8 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: opentripplanner
-    name: opentripplanner
+      app: opentripplanner-waltti
+    name: opentripplanner-waltti
   spec:
     tags:
     - from:
@@ -22,13 +22,13 @@ items:
   metadata:
     creationTimestamp: null
     labels:
-      app: opentripplanner
-    name: opentripplanner
+      app: opentripplanner-waltti
+    name: opentripplanner-waltti
   spec:
     replicas: 2
     selector:
-      app: opentripplanner
-      deploymentconfig: opentripplanner
+      app: opentripplanner-waltti
+      deploymentconfig: opentripplanner-waltti
     strategy:
       resources: {}
       rollingParams:
@@ -41,15 +41,19 @@ items:
       metadata:
         creationTimestamp: null
         labels:
-          app: opentripplanner
-          deploymentconfig: opentripplanner
+          app: opentripplanner-waltti
+          deploymentconfig: opentripplanner-waltti
       spec:
         containers:
         - image: hsldevcom/opentripplanner
           env:
-          - name: OTP_DATA_CONTAINER_URL
+          - name: ROUTER_DATA_CONTAINER_URL
             value: http://opentripplanner-data-con:8080
-          name: opentripplanner
+          - name: ROUTER_NAME
+            value: waltti
+          - name: JAVA_OPTS
+            value: -Xmx5000M -Xms5000M
+          name: opentripplanner-waltti
           livenessProbe:
             httpGet:
               path: /otp/routers/default
@@ -71,13 +75,10 @@ items:
             protocol: TCP
           resources:
             requests:
-              cpu: 4000m
-              memory: 14000Mi
+              cpu: 500m
+              memory: 5500Mi
             limits:
-              memory: 14000Mi
-          volumeMounts:
-          - mountPath: /root/.m2
-            name: opentripplanner-volume-1
+              memory: 5500Mi
         volumes:
         - emptyDir: {}
           name: opentripplanner-volume-1
@@ -87,10 +88,10 @@ items:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - opentripplanner
+        - opentripplanner-waltti
         from:
           kind: ImageStreamTag
-          name: opentripplanner:latest
+          name: opentripplanner-waltti:latest
       type: ImageChange
   status: {}
 kind: List

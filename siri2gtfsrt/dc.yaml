@@ -42,7 +42,7 @@ items:
           mem: 8g
         containers:
         - env:
-          - name: CHAIN_URL
+          - name: TRAIN_URL
             value: http://raildigitraffic2gtfsrt:8080/hsl
           - name: HSL_URL
             value: http://navigator-server:8080/siriaccess/vm/json?operatorRef=HSL

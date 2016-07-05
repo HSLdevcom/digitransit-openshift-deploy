@@ -47,10 +47,12 @@ items:
               secretKeyRef:
                 name: fontstack
                 key: fontstackpassword
-          - name: OTP_URL
-            value: opentripplanner
-          - name: OTP_PORT
-            value: "8080"
+          - name: HSL_OTP_URL
+            value: opentripplanner-hsl:8080/otp/routers/hsl/index/graphql
+          - name: FINLAND_OTP_URL
+            value: opentripplanner-finland:8080/otp/routers/finland/index/graphql
+          - name: WALTTI_OTP_URL
+            value: opentripplanner-waltti:8080/otp/routers/waltti/index/graphql
           image: hsldevcom/hsl-map-server
           name: hsl-map-server
           livenessProbe:
