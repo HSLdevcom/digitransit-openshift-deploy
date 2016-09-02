@@ -55,7 +55,7 @@ items:
                 - bash
                 - '-c'
                 - 'curl localhost:9200/pelias/_search?q=* | grep -v error'
-            initialDelaySeconds: 240
+            initialDelaySeconds: 360
             timeoutSeconds: 30
             periodSeconds: 10
           readinessProbe:
