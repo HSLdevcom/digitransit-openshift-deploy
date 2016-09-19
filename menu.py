@@ -172,7 +172,9 @@ class DeployShell(cmd2.Cmd, object):
                 # This also deletes istags
                 self.oc_cmd('delete', 'is', t)
 
-            self.oc_cmd('create', '-f', path.join(t, type + '.yaml'))
+            template = path.join(t, type + '.yaml')
+            content = self.render(template);
+            self.pipe_to_oc(content, 'create', '-f', '-');   
 
     complete_recreate = target_complete
 
