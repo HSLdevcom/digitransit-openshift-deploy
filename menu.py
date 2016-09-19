@@ -140,7 +140,6 @@ class DeployShell(cmd2.Cmd, object):
     def render(self, template):
         '''renders template with env based props'''
         template_file = self.env.get_template(template)
-        print (template,self.projectConfig[self.project])
         return template_file.render(self.projectConfig[self.project]);
 
     def do_recreate(self, arg):
