@@ -5,14 +5,14 @@ from __future__ import print_function
 from base64 import b64decode
 from glob import iglob
 from os import listdir, path
-from re import findall
+from re import findall, search
 from subprocess import PIPE, Popen
 
 from appdirs import user_config_dir
 from blessings import Terminal
 import cmd2
 from ruamel import yaml
-
+from jinja2 import FileSystemLoader, Environment
 from six.moves import input
 
 # Python readline has completer delimiters that work for the Python shell,
@@ -20,12 +20,10 @@ from six.moves import input
 import readline
 readline.set_completer_delims(readline.get_completer_delims().replace('-', ''))
 
-
 CONFIG_PATH = path.join(user_config_dir('dt-openshift-deploy', 'digitransit'),
                         'dt-openshift-deploy.yaml')
 OS_TYPES = ('svc', 'dc', 'route')
 term = Terminal()
-
 
 class DeployShell(cmd2.Cmd, object):
     intro = 'Type help or ? to list commands.\n'
@@ -33,18 +31,67 @@ class DeployShell(cmd2.Cmd, object):
     def __init__(self, config):
         self.config = config
         super(DeployShell, self).__init__()
-        self.prompt = self.colorize('(dt-openshift-deploy) ', 'bold')
+        self.project = self.get_project_name(self.oc_query('project'))
+        self.set_prompt()
+
+        TEMPLATES_DIR = path.abspath(path.dirname(__file__))
+        loader = FileSystemLoader(TEMPLATES_DIR)
+        self.env = Environment(loader=loader)
+        self.projectConfig = {'dev':read_yaml(file_path('dev.yaml')), 'test':read_yaml(file_path('test.yaml'))}
+
+    def set_prompt(self):
+        self.prompt = self.colorize('(dt-openshift-deploy@' + (self.project or 'not logged in') + ') ', 'bold')
 
     def oc_cmd(self, *args):
-        '''Run oc with given arguments'''
-        p = Popen((self.config['oc_path'],) + args, stderr=PIPE)
-        if p.wait() != 0:
-            errors = '\n'.join(p.stderr.readlines())
-            if errors.find('provide credentials') != -1:
-                print('You need to log in')
+        '''Run oc with given arguments and print possible error and return false if not logged in'''
+        process = Popen((self.config['oc_path'],) + args, stderr=PIPE)
+        errors = self.get_errors(process)
+        if errors:
+            self.print_oc_error(errors);
+
+        if self.is_login_error(errors):
+            return False
+
+        return True
+
+    def get_errors(self, process):
+        if process.wait() != 0:
+            errors = '\n'.join(process.stderr.readlines())
+            return errors
+        return None
+
+    def print_oc_error(self, errors):
+        if self.is_login_error(errors):
+            print('you need to log in')
+        else:
+            print(errors)
+
+    def is_login_error(self, error):
+        '''Check if login error'''
+        return error != None and error.find('provide credentials') != -1
+
+    def oc_query(self, *args):
+        '''Run oc with given args and return output of None if error'''
+        process = Popen((self.config['oc_path'],) + args, stderr=PIPE, stdout=PIPE)
+        errors = self.get_errors(process)
+        if errors:
+            self.print_oc_error(errors);
+            return None
+        return '\n'.join(process.stdout.readlines())
+
+    def pipe_to_oc(self, content, *args):
+        '''Run oc with given args and return output of None if error'''
+
+        p = Popen((self.config['oc_path'],) + args, stdin=PIPE, stderr=PIPE, stdout=PIPE)
+        stdout, stderr = p.communicate(input=content)
+
+        if stderr:
+            self.print_oc_error(stderr);
+
+            if self.is_login_error(stderr):
                 return False
-            else:
-                print(errors)
+
+
         return True
 
     def preloop(self):
@@ -70,6 +117,30 @@ class DeployShell(cmd2.Cmd, object):
         #      (or some other tag, if used) in Docker Hub
         # TODO Test that routes/services are actually reachable
         self.oc_cmd('status')
+
+    def get_project_name(self, out):
+        '''Parse project name project'''
+        if out is not None:
+            m = search('Using project "(.*?)"', out)
+            return m.group(1)
+        return None
+
+    def do_project(self, *arg):
+        '''Display or set current project'''
+        if len(arg) == 1 and arg[0]: #set
+            p = self.oc_query('project', arg[0]);
+            if p is not None:
+                print(p)
+                self.project = arg[0]
+                self.set_prompt()
+        else:
+            project = self.oc_query('project')
+            print(project)
+
+    def render(self, template):
+        '''renders template with env based props'''
+        template_file = self.env.get_template(template)
+        return template_file.render(self.projectConfig[self.project]);
 
     def do_recreate(self, arg):
         '''recreate TYPE NAME
@@ -101,7 +172,9 @@ class DeployShell(cmd2.Cmd, object):
                 # This also deletes istags
                 self.oc_cmd('delete', 'is', t)
 
-            self.oc_cmd('create', '-f', path.join(t, type + '.yaml'))
+            template = path.join(t, type + '.yaml')
+            content = self.render(template);
+            self.pipe_to_oc(content, 'create', '-f', '-');   
 
     complete_recreate = target_complete
 
@@ -116,13 +189,29 @@ class DeployShell(cmd2.Cmd, object):
             apply svc digitransit-proxy
             apply dc all
         '''
-        type, target = arg.split()
+
+        dryRun = False
+
+        parts = arg.split()
+        if len(parts) == 2:
+            type, target = parts
+        else:
+            type, target, dry = parts
+            if dry == '--dry':
+                dryRun = True
+
         if target == 'all':
             targets = dirswith(type)
         else:
             targets = [target]
         for t in targets:
-            self.oc_cmd('apply', '-f', path.join(t, type + '.yaml'))
+            template = path.join(t, type + '.yaml')
+            content = self.render(template);
+            if dryRun:
+                print(content)
+            else:
+                self.pipe_to_oc(content, 'apply', '-f', '-');
+            #self.oc_cmd('apply', '-f', path.join(t, type + '.yaml'))
 
     complete_apply = target_complete
 
@@ -148,6 +237,8 @@ class DeployShell(cmd2.Cmd, object):
         '''
         username, password = arg.split()
         self.oc_cmd('login', '--username', username, '--password', password)
+        self.project = self.get_project_name(self.oc_query('project'))
+        self.set_prompt()
 
     def do_secrets(self, arg):
         '''
@@ -227,7 +318,6 @@ class DeployShell(cmd2.Cmd, object):
         print()  # Clear line, like when quitting with quit
         return True
 
-
 def get_target_names(target_type):
     if target_type == 'dc':
         kind = 'DeploymentConfig'
@@ -251,7 +341,6 @@ def get_target_names(target_type):
                     results.append(i['metadata']['name'])
     return results
 
-
 def dirswith(filename):
     '''Get all directories containing given .yaml file.'''
     return sorted([x for x in listdir('.')
@@ -259,14 +348,18 @@ def dirswith(filename):
                        not x.startswith('.') and
                        path.exists(path.join(x, filename + '.yaml')))])
 
-
-def read_config():
+def read_yaml(file):
     config = {}
-    if path.exists(CONFIG_PATH):
-        with open(CONFIG_PATH) as f:
+    if path.exists(file):
+        with open(file) as f:
             config.update(yaml.safe_load(f))
     return config
 
+def file_path(name):
+    return path.join(path.abspath(path.dirname(__file__)),name)
+
+def read_config():
+    return read_yaml(CONFIG_PATH)
 
 def save_config(config):
     if not path.exists(path.dirname(CONFIG_PATH)):
@@ -275,7 +368,6 @@ def save_config(config):
     with open(CONFIG_PATH, 'w') as f:
         yaml.safe_dump(config, f)
 
-
 def main():
     config = read_config()
     if 'oc_path' not in config:
@@ -283,7 +375,6 @@ def main():
         save_config(config)
 
     DeployShell(config).cmdloop()
-
 
 if __name__ == '__main__':
     main()

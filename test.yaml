@@ -1,0 +1,3 @@
+digitransitUi:
+  replicas: 2
+  deployTag: 'test'

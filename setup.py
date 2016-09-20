@@ -14,7 +14,8 @@ requirements = [
     'blessings',
     'cmd2',
     'ruamel.yaml',
-    'six'
+    'six',
+    'jinja2'
 ]
 
 setup(

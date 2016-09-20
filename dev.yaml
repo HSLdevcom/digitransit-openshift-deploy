@@ -1,0 +1,3 @@
+digitransitUi:
+  replicas: 1
+  deployTag: 'latest'

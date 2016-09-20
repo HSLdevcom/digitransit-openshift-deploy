@@ -11,6 +11,15 @@ items:
     name: digitransit-ui-default
   spec:
     dockerImageRepository: hsldevcom/digitransit-ui
+    tags:
+      -
+        name: latest
+        annotations: null
+        from:
+          kind: DockerImage
+          name: 'hsldevcom/digitransit-ui:{{ digitransitUi.deployTag or 'latest' }}'
+        importPolicy:
+          scheduled: true
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -21,7 +30,7 @@ items:
       app: digitransit-ui-default
     name: digitransit-ui-default
   spec:
-    replicas: 2
+    replicas: {{ digitransitUi.replicas or 1 }}
     selector:
       app: digitransit-ui-default
     strategy:
@@ -116,6 +125,15 @@ items:
     name: digitransit-ui-hsl
   spec:
     dockerImageRepository: hsldevcom/digitransit-ui
+    tags:
+      -
+        name: latest
+        annotations: null
+        from:
+          kind: DockerImage
+          name: 'hsldevcom/digitransit-ui:{{ digitransitUi.deployTag or 'latest' }}'
+        importPolicy:
+          scheduled: true
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -126,7 +144,7 @@ items:
       app: digitransit-ui-hsl
     name: digitransit-ui-hsl
   spec:
-    replicas: 2
+    replicas: {{ digitransitUi.replicas or 1 }}
     selector:
       app: digitransit-ui-hsl
     strategy:
@@ -207,7 +225,7 @@ items:
         - digitransit-ui-hsl
         from:
           kind: ImageStreamTag
-          name: digitransit-ui-hsl:latest
+          name: digitransit-ui-default:latest
       type: ImageChange
   status: {}
 
@@ -221,6 +239,15 @@ items:
     name: digitransit-ui-joensuu
   spec:
     dockerImageRepository: hsldevcom/digitransit-ui
+    tags:
+      -
+        name: latest
+        annotations: null
+        from:
+          kind: DockerImage
+          name: 'hsldevcom/digitransit-ui:{{ digitransitUi.deployTag or 'latest' }}'
+        importPolicy:
+          scheduled: true
   status:
     dockerImageRepository: ""
 - apiVersion: v1
@@ -231,7 +258,7 @@ items:
       app: digitransit-ui-joensuu
     name: digitransit-ui-joensuu
   spec:
-    replicas: 2
+    replicas: {{ digitransitUi.replicas or 1 }}
     selector:
       app: digitransit-ui-joensuu
     strategy:
@@ -312,7 +339,7 @@ items:
         - digitransit-ui-joensuu
         from:
           kind: ImageStreamTag
-          name: digitransit-ui-joensuu:latest
+          name: digitransit-ui-default:latest
       type: ImageChange
   status: {}
 
