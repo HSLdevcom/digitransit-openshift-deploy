@@ -58,5 +58,24 @@ items:
   status:
     loadBalancer: {}
 
+# Turku
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-turku
+    name: digitransit-ui-turku
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: digitransit-ui-turku
+  status:
+    loadBalancer: {}
+
 kind: List
 metadata: {}

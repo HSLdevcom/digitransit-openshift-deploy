@@ -202,3 +202,28 @@ items:
         INSERT
         -----END CERTIFICATE-----
       insecureEdgeTerminationPolicy: Redirect
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: dev-turku
+    name: dev-turku
+  spec:
+    host: dev-turku.digitransit.fi
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: digitransit-proxy
+    tls:
+      termination: edge
+      key: |-
+        -----BEGIN PRIVATE KEY-----
+        INSERT
+        -----END PRIVATE KEY-----
+      certificate: |-
+        -----BEGIN CERTIFICATE-----
+        INSERT
+        -----END CERTIFICATE-----
+      insecureEdgeTerminationPolicy: Redirect

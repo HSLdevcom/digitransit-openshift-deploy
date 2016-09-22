@@ -343,5 +343,118 @@ items:
       type: ImageChange
   status: {}
 
+# Turku
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-turku
+    name: digitransit-ui-turku
+  spec:
+    dockerImageRepository: hsldevcom/digitransit-ui
+    tags:
+      -
+        name: latest
+        annotations: null
+        from:
+          kind: DockerImage
+          name: 'hsldevcom/digitransit-ui:{{ digitransitUi.deployTag or 'latest' }}'
+        importPolicy:
+          scheduled: true
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: digitransit-ui-turku
+    name: digitransit-ui-turku
+  spec:
+    replicas: {{ digitransitUi.replicas or 1 }}
+    selector:
+      app: digitransit-ui-turku
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: digitransit-ui-turku
+      spec:
+        nodeSelector:
+          mem: 8g
+        containers:
+        - env:
+          - name: CONFIG
+            value: turku
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrydsn
+          - name: SENTRY_SECRET_DSN
+            valueFrom:
+              secretKeyRef:
+                name: sentry
+                key: sentrysecretdsn
+          - name: PIWIK_ID
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: id-turku
+          - name: PIWIK_ADDRESS
+            valueFrom:
+              secretKeyRef:
+                name: piwik
+                key: address
+          - name: API_URL
+            valueFrom:
+              secretKeyRef:
+                name: api-url
+                key: api-url
+          - name: MAP_URL
+            valueFrom:
+              secretKeyRef:
+                name: map-url
+                key: map-url
+          image: hsldevcom/digitransit-ui
+          name: digitransit-ui-turku
+          livenessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /favicon.ico
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 2
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 600Mi
+            limits:
+              memory: 600Mi
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - digitransit-ui-turku
+        from:
+          kind: ImageStreamTag
+          name: digitransit-ui-default:latest
+      type: ImageChange
+  status: {}
 kind: List
 metadata: {}
