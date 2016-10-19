@@ -75,9 +75,9 @@ items:
           resources:
             requests:
               cpu: 1000m
-              memory: 1500Mi
+              memory: 3000Mi
             limits:
-              memory: 1500Mi
+              memory: 3000Mi
           volumeMounts:
           - mountPath: /usr/share/elasticsearch/data
             name: pelias-data-container-volume-1
