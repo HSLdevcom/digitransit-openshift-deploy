@@ -62,10 +62,10 @@ items:
             protocol: TCP
           resources:
             requests:
-              cpu: 200m
-              memory: 1500Mi
+              cpu: 100m
+              memory: 2600Mi
             limits:
-              memory: 1500Mi
+              memory: 2600Mi
     test: false
     triggers:
     - type: ConfigChange
