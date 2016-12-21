@@ -46,7 +46,7 @@ items:
         containers:
         - env:
           - name: CONFIG
-            value: default
+            value: matka
           - name: SENTRY_DSN
             valueFrom:
               secretKeyRef:
