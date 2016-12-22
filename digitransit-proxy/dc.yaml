@@ -67,9 +67,9 @@ items:
           resources:
             requests:
               cpu: 100m
-              memory: 20Mi
+              memory: 200Mi
             limits:
-              memory: 20Mi
+              memory: 200Mi
     test: false
     triggers:
     - type: ConfigChange
